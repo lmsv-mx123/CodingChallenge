@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	  #countdown{
+        width: 100%;
+		font-family: sans-serif;
+      	display: inline-block;
+      	text-align: center;
+      	font-size: 30px;
+      }
+      #countdown > div{
+        width: 21%;
+      	border-radius: 5px;
+        border: 1px solid #C0C0C0;
+      	display: inline-block;
+      }
+	  #countdown > div:not(:last-child) {
+		margin-right: 2%
+	  }
+      #countdown div > span{
+		padding-top: 15px;
+      	border-radius: 3px;
+      	display: inline-block;
+      }
+      #countdown .label{
+		padding-bottom: 15px;
+        color: gray;
+      	font-size: 20px;
+		font-weight: normal;
+      }
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app="myApp">
+	<div ng-controller="myCtrl">
+		<div id="countdown">
+			<div>
+				<span>{{days}}</span>
+				<div class="label">Days</div>
+			</div>
+			<div>
+				<span>{{hours}}</span>
+				<div class="label">Hours</div>
+			</div>
+			<div>
+				<span>{{minutes}}</span>
+				<div class="label">Minutes</div>
+			</div>
+			<div>
+				<span>{{seconds}}</span>
+				<div class="label">Seconds</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	var myApp = angular.module('myApp', []);
+	myApp.controller('myCtrl', function($scope,$timeout) {
+		var numberDaysFromNow = 10;
+		$scope.initialClock = new Date(Date.parse(new Date()) + numberDaysFromNow * 24 * 60 * 60 * 1000);
+		$scope.counter = Date.parse($scope.initialClock) - Date.parse(new Date());
+		$scope.onTimeout = function(){
+			$scope.counter -= 1000;
+			$scope.seconds = beautify(Math.floor(($scope.counter / 1000) % 60));
+			$scope.minutes = beautify(Math.floor(($scope.counter / (1000 * 60)) % 60));
+			$scope.hours = beautify(Math.floor(($scope.counter / (1000 * 60 * 60)) % 24));
+			$scope.days = Math.floor($scope.counter / (1000 * 60 * 60 * 24));
+			mytimeout = $timeout($scope.onTimeout, 1000);
+		}
+		var mytimeout = $timeout($scope.onTimeout, 1000);
+		
+		function beautify(n) {return (n<10? '0' : '') + n;}
+	});
+	</script>
+</body>
+</html>

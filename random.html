@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		.error{color: red;}
+		.warning{color: blue;}
+		.ignored{color: green;}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app="myApp">
+	<div ng-controller="myCtrl">
+	  <p>Enter the upper bound:</p>
+	  <input type="text" ng-model="bound" ng-init="0" placeholder="0"></input>
+	  <button ng-click="myFunc()">OK</button>
+	  <p ng-if="!error">Number generated: {{number}}</p>
+	  <p ng-if="error" class="error"> {{error}}</p>
+	</div>
+
+	<script src="random.js"></script>
+	<script>
+	angular.module('myApp', [])
+	  .controller('myCtrl', ['$scope', function($scope) {
+		$scope.number = 0;
+		$scope.myFunc = function() {
+		  try {
+			$scope.number = randomNumber($scope.bound);
+			$scope.error = false;
+		  }
+		  catch(error) {
+			$scope.error = error;
+		  }
+		};
+	  }]);
+	</script>
+</body>
+</html>
